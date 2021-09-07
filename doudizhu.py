@@ -16,6 +16,7 @@ list_outside2 = ['mh-3', 'bt-4', 'fp-5', 'mh-5', 'rt-5', 'bt-6', 'rt-6', 'mh-7',
 list_base = ['mh-12', 'fp-14', 'bt-15']
 
 
+# 列出所有可能的顺子
 def find_all_shunzi(list_input):
     list_input = _remove_duplicate(list_input)
     list_link = []
@@ -43,6 +44,7 @@ def find_all_shunzi(list_input):
     #   output [['10', '11', '12', '13', '14'], ['11', '12', '13', '14', '15'], ['10', '11', '12', '13', '14', '15']]
 
 
+# 列出所有可能的三不带
 def find_all_sanbudai(list_input):
     list_input = _extract_num(list_input)
     sets = {}
@@ -62,7 +64,7 @@ def find_all_sanbudai(list_input):
     # output [['4', '4', '4'], ['10', '10', '10'], ['14', '14', '14']]
 
 
-# 不拆双和炸
+# 列出所有可能的三带一（不拆双和炸）
 def find_all_sandaiyi(list_input):
     list_input = _extract_num(list_input)
     sets = {}
@@ -89,7 +91,7 @@ def find_all_sandaiyi(list_input):
     # output [['4', '4', '4', '3'], ['4', '4', '4', '11'], ['4', '4', '4', '12'], ['4', '4', '4', '15'], ['10', '10', '10', '3'], ['10', '10', '10', '11'], ['10', '10', '10', '12'], ['10', '10', '10', '15'], ['14', '14', '14', '3'], ['14', '14', '14', '11'], ['14', '14', '14', '12'], ['14', '14', '14', '15']]
 
 
-# 不拆三和炸
+# 列出所有可能的三带一对（不拆三和炸）
 def find_all_sandaiyidui(list_input):
     list_input = _extract_num(list_input)
     sets = {}
@@ -116,6 +118,7 @@ def find_all_sandaiyidui(list_input):
     # output [['4', '4', '4', '8', '8'], ['4', '4', '4', '13', '13'], ['10', '10', '10', '8', '8'], ['10', '10', '10', '13', '13'], ['14', '14', '14', '8', '8'], ['14', '14', '14', '13', '13']]
 
 
+# 列出所有可能的对子
 def find_all_duizi(list_input):
     list_input = _extract_num(list_input)
     sets = {}
@@ -135,6 +138,7 @@ def find_all_duizi(list_input):
     # output [['8', '8'], ['13', '13']]
 
 
+# 列出所有可能的四带二(不拆三和炸)
 def find_all_sidaier(list_input):
     list_input = _extract_num(list_input)
     sets = {}
@@ -166,6 +170,7 @@ def find_all_sidaier(list_input):
     # output [['14', '14', '14', '14', '3', '11'], ['14', '14', '14', '14', '3', '12'], ['14', '14', '14', '14', '11', '3'], ['14', '14', '14', '14', '11', '12'], ['14', '14', '14', '14', '12', '3'], ['14', '14', '14', '14', '12', '11']]
 
 
+# 列出所有可能的四带两对(不拆三)
 def find_all_sidailiangdui(list_input):
     list_input = _extract_num(list_input)
     sets = {}
@@ -205,6 +210,7 @@ def find_all_sidailiangdui(list_input):
     # output [['14', '14', '14', '14', '8', '8', '13', '13']]
 
 
+# 列出所有可能的炸弹
 def find_all_zhadan(list_input):
     list_input = _extract_num(list_input)
     sets = {}
@@ -222,6 +228,108 @@ def find_all_zhadan(list_input):
     return list_return
     # input ['3', '4', '4', '4', '8', '8', '10', '10', '10', '11', '12', '13', '13', '14', '14', '14', '14']
     # output [['14', '14', '14', '14']]
+
+
+# 列出所有可能的飞机不带
+# todo: 判断三连飞，四连飞情况
+def find_all_feijibudai(list_input):
+    list_input = _extract_num(list_input)
+    sets = {}
+    list_connect_three = []
+    for item in list_input:
+        if sets.get(item, False):
+            sets[item] = str(int(sets[item]) + 1)
+            continue
+        sets[item] = '1'
+    last_set = {}
+    for k in sets:
+        if last_set and sets[k] == '3' and list(last_set.values())[0] == '3':
+            lk = list(last_set.keys())[0]
+            list_connect_three.append([lk, lk, lk, k, k, k])
+        last_set = {k: sets[k]}
+    return list_connect_three
+
+
+# 列出所有可能的飞机带单
+# todo: 判断三连飞，四连飞情况
+def find_all_feijidaidan(list_input):
+    list_input = _extract_num(list_input)
+    sets = {}
+    list_connect_three = []
+    list_single = []
+    list_add_one = []
+    list_return_temp = []
+    list_return = []
+    for item in list_input:
+        if sets.get(item, False):
+            sets[item] = str(int(sets[item]) + 1)
+            continue
+        sets[item] = '1'
+    last_set = {}
+    for k in sets:
+        if last_set and sets[k] == '3' and list(last_set.values())[0] == '3':
+            lk = list(last_set.keys())[0]
+            list_connect_three.append([lk, lk, lk, k, k, k])
+        if sets[k] == '1':
+            list_single.append(k)
+        last_set = {k: sets[k]}
+    for sixes in list_connect_three:
+        for single in list_single:
+            list_add_one.append(sixes + [single])
+    for sixes in list_add_one:
+        for single in list_single:
+            if sixes[-1] != single:
+                list_return_temp.append(_sort_list(sixes + [single]))
+
+    # remove duplicate
+    for item in list_return_temp:
+        if _sort_list(item) not in list_return:
+            list_return.append(item)
+
+    return list_return
+    # input ['3', '4', '4', '4', '5', '5', '5', '10', '10', '11', '12', '13', '13', '14', '14', '14', '14']
+    # output [['3', '4', '4', '4', '5', '5', '5', '11'], ['3', '4', '4', '4', '5', '5', '5', '12'], ['4', '4', '4', '5', '5', '5', '11', '12']]
+
+
+# 列出所有可能的飞机带双
+# todo: 判断三连飞，四连飞情况
+def find_all_feijidaishuang(list_input):
+    list_input = _extract_num(list_input)
+    sets = {}
+    list_connect_three = []
+    list_double = []
+    list_add_one = []
+    list_return_temp = []
+    list_return = []
+    for item in list_input:
+        if sets.get(item, False):
+            sets[item] = str(int(sets[item]) + 1)
+            continue
+        sets[item] = '1'
+    last_set = {}
+    for k in sets:
+        if last_set and sets[k] == '3' and list(last_set.values())[0] == '3':
+            lk = list(last_set.keys())[0]
+            list_connect_three.append([lk, lk, lk, k, k, k])
+        if sets[k] == '2':
+            list_double.append(k)
+        last_set = {k: sets[k]}
+    for sixes in list_connect_three:
+        for double in list_double:
+            list_add_one.append(sixes + [double, double])
+    for sixes in list_add_one:
+        for double in list_double:
+            if sixes[-1] != double:
+                list_return_temp.append(_sort_list(sixes + [double, double]))
+
+    # remove duplicate
+    for item in list_return_temp:
+        if _sort_list(item) not in list_return:
+            list_return.append(item)
+
+    return list_return
+    # input ['3', '4', '4', '4', '5', '5', '5', '10', '10', '11', '11', '13', '13', '14', '14', '14', '14']
+    # output [['4', '4', '4', '5', '5', '5', '10', '10', '11', '11'], ['4', '4', '4', '5', '5', '5', '10', '10', '13', '13'], ['4', '4', '4', '5', '5', '5', '11', '11', '13', '13']]
 
 
 # 发牌
@@ -245,6 +353,7 @@ def set_picks():
     print(sorted(list_remain, key=lambda e: int(e.split('-')[1])))
 
 
+# 输入牌型列表，输出牌型(或非法牌型)
 def find_type(picks):
     num_list = _extract_num(picks)
 
@@ -385,6 +494,7 @@ def wangzha(num_list):
 
 
 # 飞机
+# todo: 判断三连飞，四连飞情况
 def feiji(num_list):
     if len(num_list) != 6 and len(num_list) != 8 and len(num_list) != 10:
         return False
@@ -420,6 +530,7 @@ def feiji(num_list):
     return False
 
 
+# 输入牌面列表，输出数字(字符串类型)列表
 def _extract_num(picks):
     num_list = []
     for pick in picks:
@@ -430,10 +541,12 @@ def _extract_num(picks):
     return num_list
 
 
+# 数字(字符串)列表去重
 def _remove_duplicate(picks):
     return sorted(list(set(_extract_num(picks))), key=lambda e: int(e))
 
 
+# 数字(字符串)列表排序
 def _sort_list(num_list):
     return sorted(num_list, key=lambda e: int(e))
 
@@ -441,4 +554,4 @@ def _sort_list(num_list):
 
 # print(find_type(['bt-3', 'rt-3', 'ft-3', 'ft-3', 'mh-4', 'mh-4']))
 # set_picks()
-print(find_all_zhadan(['fp-3', 'fp-4', 'rt-4', 'mh-4', 'bt-8', 'fp-8', 'mh-10', 'bt-10', 'rt-10', 'mh-11', 'bt-12', 'fp-13', 'mh-13', 'bt-14', 'mh-14', 'rt-14', 'mh-14']))
+print(find_all_feijidaidan(['fp-3', 'fp-4', 'rt-4', 'mh-4', 'bt-5', 'fp-5', 'mh-5', 'bt-10', 'rt-10', 'mh-11', 'bt-12', 'fp-13', 'mh-13', 'bt-14', 'mh-14', 'rt-14', 'mh-14']))
