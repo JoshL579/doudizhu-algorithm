@@ -116,6 +116,115 @@ def find_all_sandaiyidui(list_input):
     # output [['4', '4', '4', '8', '8'], ['4', '4', '4', '13', '13'], ['10', '10', '10', '8', '8'], ['10', '10', '10', '13', '13'], ['14', '14', '14', '8', '8'], ['14', '14', '14', '13', '13']]
 
 
+def find_all_duizi(list_input):
+    list_input = _extract_num(list_input)
+    sets = {}
+    list_return = []
+    for item in list_input:
+        if sets.get(item, False):
+            sets[item] = str(int(sets[item]) + 1)
+            continue
+        sets[item] = '1'
+    for k in sets:
+        if sets[k] == '2':
+            list_return.append([k, k])
+    if len(list_return) == 0:
+        return False
+    return list_return
+    # input ['3', '4', '4', '4', '8', '8', '10', '10', '10', '11', '12', '13', '13', '14', '14', '14', '15']
+    # output [['8', '8'], ['13', '13']]
+
+
+def find_all_sidaier(list_input):
+    list_input = _extract_num(list_input)
+    sets = {}
+    list_quadra = []
+    list_single = []
+    list_return_temp = []
+    list_return = []
+    for item in list_input:
+        if sets.get(item, False):
+            sets[item] = str(int(sets[item]) + 1)
+            continue
+        sets[item] = '1'
+    for k in sets:
+        if sets[k] == '4':
+            list_quadra.append(k)
+        if sets[k] == '1':
+            list_single.append(k)
+    for quadra in list_quadra:
+        for single in list_single:
+            list_return_temp.append([quadra, quadra, quadra, quadra, single])
+    for item_return in list_return_temp:
+        for single in list_single:
+            if single != item_return[-1]:
+                list_return.append(item_return + [single])
+    if len(list_return) == 0:
+        return False
+    return list_return
+    # input ['3', '4', '4', '4', '8', '8', '10', '10', '10', '11', '12', '13', '13', '14', '14', '14', '14']
+    # output [['14', '14', '14', '14', '3', '11'], ['14', '14', '14', '14', '3', '12'], ['14', '14', '14', '14', '11', '3'], ['14', '14', '14', '14', '11', '12'], ['14', '14', '14', '14', '12', '3'], ['14', '14', '14', '14', '12', '11']]
+
+
+def find_all_sidailiangdui(list_input):
+    list_input = _extract_num(list_input)
+    sets = {}
+    list_quadra = []
+    list_double = []
+    list_return_temp = []
+    list_return = []
+    for item in list_input:
+        if sets.get(item, False):
+            sets[item] = str(int(sets[item]) + 1)
+            continue
+        sets[item] = '1'
+    for k in sets:
+        if sets[k] == '4':
+            list_quadra.append(k)
+        if sets[k] == '2':
+            list_double.append(k)
+    for quadra in list_quadra:
+        for double in list_double:
+            list_return_temp.append([quadra, quadra, quadra, quadra, double, double])
+    for item_return in list_return_temp:
+        for double in list_double:
+            if double != item_return[-1]:
+                list_return.append(item_return + [double, double])
+
+    # remove duplicate
+    for i, item in enumerate(list_return):
+        if i == 0:
+            continue
+        if _sort_list(item) == _sort_list(list_return[i-1]):
+            list_return.remove(item)
+
+    if len(list_return) == 0:
+        return False
+    return list_return
+    # input ['3', '4', '4', '4', '8', '8', '10', '10', '10', '11', '12', '13', '13', '14', '14', '14', '14']
+    # output [['14', '14', '14', '14', '8', '8', '13', '13']]
+
+
+def find_all_zhadan(list_input):
+    list_input = _extract_num(list_input)
+    sets = {}
+    list_return = []
+    for item in list_input:
+        if sets.get(item, False):
+            sets[item] = str(int(sets[item]) + 1)
+            continue
+        sets[item] = '1'
+    for k in sets:
+        if sets[k] == '4':
+            list_return.append([k, k, k, k])
+    if len(list_return) == 0:
+        return False
+    return list_return
+    # input ['3', '4', '4', '4', '8', '8', '10', '10', '10', '11', '12', '13', '13', '14', '14', '14', '14']
+    # output [['14', '14', '14', '14']]
+
+
+# 发牌
 def set_picks():
     list_mine = random.sample(list_all, 17)
     list_remain = [card for card in list_all if card not in list_mine]
@@ -325,7 +434,11 @@ def _remove_duplicate(picks):
     return sorted(list(set(_extract_num(picks))), key=lambda e: int(e))
 
 
+def _sort_list(num_list):
+    return sorted(num_list, key=lambda e: int(e))
+
+
 
 # print(find_type(['bt-3', 'rt-3', 'ft-3', 'ft-3', 'mh-4', 'mh-4']))
 # set_picks()
-print(find_all_sandaiyidui(['fp-3', 'fp-4', 'rt-4', 'mh-4', 'bt-8', 'fp-8', 'mh-10', 'bt-10', 'rt-10', 'mh-11', 'bt-12', 'fp-13', 'mh-13', 'bt-14', 'mh-14', 'rt-14', 'mh-15']))
+print(find_all_zhadan(['fp-3', 'fp-4', 'rt-4', 'mh-4', 'bt-8', 'fp-8', 'mh-10', 'bt-10', 'rt-10', 'mh-11', 'bt-12', 'fp-13', 'mh-13', 'bt-14', 'mh-14', 'rt-14', 'mh-14']))
