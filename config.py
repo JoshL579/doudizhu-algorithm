@@ -12,4 +12,4 @@ list_outside = ['rt-3', 'bt-3', 'bt-5', 'mh-6', 'fp-6', 'rt-7', 'bt-7', 'bt-9', 
 list_outside1 = ['rt-3', 'bt-3', 'bt-5', 'mh-6', 'fp-6', 'rt-7', 'bt-7', 'bt-9', 'rt-9', 'mh-9', 'fp-10', 'bt-11', 'bt-13', 'rt-13', 'fp-15', 'rt-15', 'j-17']
 list_outside2 = ['mh-3', 'bt-4', 'fp-5', 'mh-5', 'rt-5', 'bt-6', 'rt-6', 'mh-7', 'fp-7', 'rt-8', 'mh-8', 'fp-9', 'rt-11', 'fp-11', 'fp-12', 'rt-12', 'j-16']
 list_base = ['mh-12', 'fp-14', 'bt-15']
-picks_previous = {}
+picks_previous = {'type': 'sandaiyi', 'num': '4', 'picks': ['4', '4', '4', '3']}

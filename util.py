@@ -1,10 +1,14 @@
 # 输入牌面列表，输出数字(字符串类型)列表
 def extract_num(picks):
-    num_list = []
-    for pick in picks:
-        num = pick.split('-')[1]
-        num_list.append(num)
-    num_list.sort(key=lambda e: int(e))
+    try:
+        num_list = []
+        for pick in picks:
+            num = pick.split('-')[1]
+            num_list.append(num)
+        num_list.sort(key=lambda e: int(e))
+    except:
+        # print(picks)
+        return picks
     # print(num_list)
     return num_list
 
