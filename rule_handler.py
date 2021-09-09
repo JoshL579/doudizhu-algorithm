@@ -20,9 +20,10 @@ from config import *
 
 def loops(histories):
     new_history = histories
-    for i in range(0, 9):
+    for i in range(3):
         new_history = one_term(new_history)
         print(new_history)
+        print(len(new_history))
 
 
 def term_manager():
@@ -87,10 +88,13 @@ def add_new_history(history_dict, picker):
     history = history_dict['history']
     me_left = history_dict['me_left']
     enemy_left = history_dict['enemy_left']
+    new_round = False
     try:
         last_pick = history[-1]
         if len(last_pick) == 0:
             last_pick = history[-2]
+            if len(last_pick) == 0:
+                new_round = True
     except:
         last_pick = []
 
@@ -100,21 +104,23 @@ def add_new_history(history_dict, picker):
         possible_picks_pool = possible_picks(list_outside=enemy_left, from_type='enemy')
 
     for picks in possible_picks_pool:
-        if len(last_pick) == 0:
+        if len(last_pick) == 0 and not new_round:
             dict_to_append = {'history': history + [[]], 'me_left': me_left, 'enemy_left': enemy_left}
             new_history.append(dict_to_append)
-        elif is_possible_picks(last_pick, picks):
+        elif is_possible_picks(last_pick, picks) or new_round:
             if picker == 'me':
                 list_left = me_left[:]
                 try:
-                    list_left.remove(picks)
+                    for pick in picks:
+                        list_left.remove(pick)
                 except:
                     pass
                 dict_to_append = {'history': history + [picks], 'me_left': list_left, 'enemy_left': enemy_left}
             else:
                 list_left = enemy_left[:]
                 try:
-                    list_left.remove(picks)
+                    for pick in picks:
+                        list_left.remove(pick)
                 except:
                     pass
                 dict_to_append = {'history': history + [picks], 'me_left': me_left, 'enemy_left': list_left}
